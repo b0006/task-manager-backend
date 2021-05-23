@@ -57,12 +57,14 @@ export class AuthService {
   }
 
   async signUp(bodyData: AuthSignUpDto) {
-    const isAlreadyExist = await this.usersService.findOneByUsername(
-      bodyData.username,
-    );
+    const isAlreadyExist = await this.usersService.findOne({
+      username: bodyData.username,
+      email: bodyData.email,
+    });
+
     if (isAlreadyExist) {
       throw new BadRequestException(
-        'Пользователь с таким логином уже существует',
+        'Пользователь с таким логином или email уже существует',
       );
     }
 

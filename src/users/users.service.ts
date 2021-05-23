@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { Model } from 'mongoose';
+import { LeanDocument, Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { User } from './users.schema';
 import { UserCreateDto } from './dto/user.create.dto';
+import { UserFindOneDto } from './dto/user.find-one.dto';
 
 @Injectable()
 export class UsersService {
@@ -11,6 +12,15 @@ export class UsersService {
 
   async findAll(): Promise<User[]> {
     return this.userModel.find({}, 'username').exec();
+  }
+
+  async findOne(data: UserFindOneDto): Promise<LeanDocument<User>> {
+    return this.userModel
+      .findOne({
+        $or: [{ username: data.username }, { email: data.email }],
+      })
+      .lean(true)
+      .exec();
   }
 
   async findOneByUsername(username: string): Promise<Partial<User>> {
