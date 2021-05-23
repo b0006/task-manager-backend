@@ -3,6 +3,7 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { User } from './users.schema';
+import { UserCreateDto } from './dto/user.create.dto';
 
 @Injectable()
 export class UsersService {
@@ -12,7 +13,11 @@ export class UsersService {
     return this.userModel.find({}, 'username').exec();
   }
 
-  async findOne(username: string): Promise<Partial<User>> {
+  async findOneByUsername(username: string): Promise<Partial<User>> {
     return this.userModel.findOne({ username }).lean(true).exec();
+  }
+
+  async create(userData: UserCreateDto): Promise<User> {
+    return this.userModel.create(userData);
   }
 }
