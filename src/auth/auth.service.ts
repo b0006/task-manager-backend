@@ -4,7 +4,7 @@ import {
   ForbiddenException,
   BadRequestException,
 } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+// import { JwtService } from '@nestjs/jwt';
 import * as bCrypt from 'bcrypt';
 
 import { User } from '../users/users.schema';
@@ -26,8 +26,7 @@ const isValidPassword = (
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UsersService,
-    private jwtService: JwtService,
+    private usersService: UsersService, // private jwtService: JwtService,
   ) {}
 
   async validateUser(
@@ -49,12 +48,12 @@ export class AuthService {
     return result;
   }
 
-  async login(user: User) {
-    const payload = { email: user.email, sub: user._id };
-    return {
-      access_token: this.jwtService.sign(payload),
-    };
-  }
+  // async login(user: User) {
+  //   const payload = { email: user.email, sub: user._id };
+  //   return {
+  //     access_token: this.jwtService.sign(payload),
+  //   };
+  // }
 
   async signUp(bodyData: AuthSignUpDto) {
     const isAlreadyExist = await this.usersService.findOne({
