@@ -14,7 +14,7 @@ export class UsersService {
     return this.userModel.find({}, 'username').exec();
   }
 
-  async findOne(data: UserFindOneDto): Promise<LeanDocument<User>> {
+  async findOne(data: Partial<UserFindOneDto>): Promise<LeanDocument<User>> {
     return this.userModel
       .findOne({
         $or: [{ username: data.username }, { email: data.email }],

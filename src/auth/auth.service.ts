@@ -31,13 +31,13 @@ export class AuthService {
   ) {}
 
   async validateUser(
-    username: string,
+    email: string,
     plainPassword: string,
   ): Promise<Partial<User>> {
-    const user = await this.usersService.findOneByUsername(username);
+    const user = await this.usersService.findOne({ email });
 
     if (user === null || typeof user === 'undefined') {
-      throw new NotFoundException('Пользователь не найден');
+      throw new NotFoundException('Пользователь c таким email не найден');
     }
 
     if (!isValidPassword(plainPassword, user.password)) {
@@ -50,7 +50,7 @@ export class AuthService {
   }
 
   async login(user: User) {
-    const payload = { username: user.username, sub: user._id };
+    const payload = { email: user.email, sub: user._id };
     return {
       access_token: this.jwtService.sign(payload),
     };
