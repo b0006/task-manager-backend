@@ -37,11 +37,11 @@ export class AuthService {
     const user = await this.usersService.findOneByUsername(username);
 
     if (user === null || typeof user === 'undefined') {
-      throw new NotFoundException("User wasn't found");
+      throw new NotFoundException('Пользователь не найден');
     }
 
     if (!isValidPassword(plainPassword, user.password)) {
-      throw new ForbiddenException('Password incorrect');
+      throw new ForbiddenException('Неверный пароль');
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
