@@ -15,12 +15,13 @@ export class UsersService {
   }
 
   async findOne(data: Partial<UserFindOneDto>): Promise<LeanDocument<User>> {
-    return this.userModel
+    const user = await this.userModel
       .findOne({
         $or: [{ username: data.username }, { email: data.email }],
       })
-      .lean(true)
       .exec();
+
+    return user.toJSON();
   }
 
   async findOneByUsername(username: string): Promise<Partial<User>> {

@@ -21,8 +21,8 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @UseGuards(LoginGuard)
-  @Post('login')
-  async login(@Request() req, @Response() res) {
+  @Post('sign-in')
+  async signIn(@Request() req, @Response() res) {
     res.json({ statusCode: 200, data: req.user });
   }
 
