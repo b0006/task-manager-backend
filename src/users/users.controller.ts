@@ -17,7 +17,6 @@ export class UsersController {
     const user = await this.userService.findOne({
       username: req.query.username,
     });
-    console.log(user);
 
     if (!user) {
       throw new NotFoundException('Пользователь не найден');
