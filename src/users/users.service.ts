@@ -14,14 +14,22 @@ export class UsersService {
     return this.userModel.find({}, 'username').exec();
   }
 
-  async findOne(data: Partial<UserFindOneDto>): Promise<LeanDocument<User>> {
+  async findOne(
+    data: Partial<UserFindOneDto>,
+    withPassword?: boolean,
+  ): Promise<LeanDocument<User>> {
+    const options = withPassword ? {} : { password: 0 };
+
     const user = await this.userModel
-      .findOne({
-        $or: [{ username: data.username }, { email: data.email }],
-      })
+      .findOne(
+        {
+          $or: [{ username: data.username }, { email: data.email }],
+        },
+        options,
+      )
       .exec();
 
-    return user.toJSON();
+    return user?.toJSON();
   }
 
   async findOneByUsername(username: string): Promise<Partial<User>> {

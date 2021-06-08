@@ -30,7 +30,7 @@ export class AuthService {
     email: string,
     plainPassword: string,
   ): Promise<Partial<User>> {
-    const user = await this.usersService.findOne({ email });
+    const user = await this.usersService.findOne({ email }, true);
 
     if (user === null || typeof user === 'undefined') {
       throw new NotFoundException('Пользователь c таким email не найден');

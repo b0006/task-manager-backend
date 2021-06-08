@@ -22,8 +22,8 @@ export class AuthController {
 
   @UseGuards(LoginGuard)
   @Post('sign-in')
-  async signIn(@Request() req, @Response() res) {
-    res.json({ statusCode: 200, data: req.user });
+  async signIn(@Request() req) {
+    return req.user;
   }
 
   @Post('sign-up')
@@ -32,9 +32,9 @@ export class AuthController {
   }
 
   @Get('/logout')
-  logout(@Request() req, @Response() res) {
+  logout(@Request() req) {
     req.session.destroy();
-    res.json({ statusCode: 200, data: true });
+    return true;
   }
 
   @UseGuards(AuthenticatedGuard)
