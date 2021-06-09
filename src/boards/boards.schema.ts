@@ -18,7 +18,7 @@ export class Board extends Document {
   @Prop({ required: true })
   title: string;
 
-  @Prop({ required: true, type: [Types.ObjectId], ref: User.name })
+  @Prop({ required: true, type: Types.ObjectId, ref: User.name })
   authorId: User;
 
   @Prop({ default: false })

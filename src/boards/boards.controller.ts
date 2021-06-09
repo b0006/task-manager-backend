@@ -44,9 +44,18 @@ export class BoardsController {
   @UseGuards(AuthenticatedGuard)
   @Delete('/:id')
   async remove(@Request() req) {
-    // TODO: сделать проверку на то, что этот пользователь может удалить свою доску
-    // сейчас любой авторизованный может удалить любую доску
-    const deleted = await this.boardService.remove(req.params.id);
+    const boardId = req.params.id;
+
+    const board = await this.boardService.findOneById(boardId);
+    if (!board) {
+      throw new NotFoundException('Доска не найдена для удаления');
+    }
+
+    if (board.authorId !== req.user?.id) {
+      throw new BadRequestException('Недостаточно прав для удаления доски');
+    }
+
+    const deleted = await this.boardService.remove(boardId);
     if (!deleted) {
       throw new NotFoundException('Доска не найдена для удаления');
     }
