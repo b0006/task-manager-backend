@@ -5,6 +5,7 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import * as bCrypt from 'bcrypt';
+import { LeanDocument } from 'mongoose';
 
 import { User } from '../users/users.schema';
 import { UsersService } from '../users/users.service';
@@ -29,7 +30,7 @@ export class AuthService {
   async validateUser(
     email: string,
     plainPassword: string,
-  ): Promise<Partial<User>> {
+  ): Promise<LeanDocument<Omit<User, 'password'>>> {
     const user = await this.usersService.findOne({ email }, true);
 
     if (user === null || typeof user === 'undefined') {

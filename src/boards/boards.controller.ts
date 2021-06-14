@@ -33,9 +33,9 @@ export class BoardsController {
 
   @UseGuards(AuthenticatedGuard)
   @Get('/')
-  async findByAuthorId(@Request() req) {
+  async findProfileBoards(@Request() req) {
     const boards = await this.boardService.findAll({
-      authorId: req.query.authorId,
+      authorId: req.user.id,
     });
 
     return boards;
@@ -52,12 +52,14 @@ export class BoardsController {
     }
 
     if (board.authorId !== req.user?.id) {
-      throw new BadRequestException('Недостаточно прав для удаления доски');
+      throw new BadRequestException('Запрещено удалять чужие доски');
     }
 
     const deleted = await this.boardService.remove(boardId);
     if (!deleted) {
-      throw new NotFoundException('Доска не найдена для удаления');
+      throw new NotFoundException(
+        'Доска не была удалена. Попробуйте повторить попытку',
+      );
     }
     return { status: true };
   }

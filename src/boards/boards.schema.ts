@@ -23,9 +23,6 @@ export class Board extends Document {
 
   @Prop({ default: false })
   isPrivate: boolean;
-
-  @Prop({ type: [Types.ObjectId], ref: User.name, default: [] })
-  allowedUserListId: User[];
 }
 
 export const BoardSchema = SchemaFactory.createForClass(Board);

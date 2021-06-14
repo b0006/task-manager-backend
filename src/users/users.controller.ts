@@ -3,16 +3,11 @@ import { Controller } from '@nestjs/common';
 
 import { UsersService } from './users.service';
 
-@Controller('/api')
+@Controller('/api/profile')
 export class UsersController {
   constructor(private userService: UsersService) {}
 
-  @Get('/users')
-  async findAll() {
-    return this.userService.findAll();
-  }
-
-  @Get('/user')
+  @Get('/')
   async findOne(@Request() req) {
     const user = await this.userService.findOne({
       username: req.query.username,
