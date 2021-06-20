@@ -5,6 +5,10 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Board } from './boards.schema';
 import { BoardCreateDto } from './dto/board-create.dto';
 
+const transpileTitle = (title: string) => {
+  return title.toLowerCase().replace(/\s+/g, '-');
+};
+
 @Injectable()
 export class BoardsService {
   constructor(@InjectModel(Board.name) private boardModel: Model<Board>) {}
@@ -23,7 +27,8 @@ export class BoardsService {
   }
 
   async create(boardData: BoardCreateDto): Promise<Board> {
-    return this.boardModel.create(boardData);
+    const titleTranspile = transpileTitle(boardData.title);
+    return this.boardModel.create({ ...boardData, titleTranspile });
   }
 
   remove(id: Types.ObjectId): Promise<Board> {
