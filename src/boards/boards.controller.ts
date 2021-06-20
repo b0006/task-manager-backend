@@ -25,6 +25,16 @@ export class BoardsController {
   @UseGuards(AuthenticatedGuard)
   @Post('/')
   async create(@Request() req, @Body() body: Omit<BoardCreateDto, 'authorId'>) {
+    const board = await this.boardService.findOneByProfile(
+      { title: body.title },
+      req.user.id,
+    );
+    if (board) {
+      throw new BadRequestException(
+        'Ошибка. Доска с таким названием уже существует',
+      );
+    }
+
     const created = await this.boardService.create({
       ...body,
       authorId: req.user.id,

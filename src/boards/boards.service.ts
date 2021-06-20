@@ -21,6 +21,19 @@ export class BoardsService {
     return boardList.map((board) => board.toJSON());
   }
 
+  async findOneByProfile(
+    data: LeanDocument<Partial<Board>>,
+    // TODO: установить корректный тип
+    authorId: any,
+  ): Promise<LeanDocument<Board>> {
+    const board = await this.boardModel
+      .findOne({
+        $and: [{ authorId: authorId }, { title: data.title }],
+      })
+      .exec();
+    return board ? board.toJSON() : null;
+  }
+
   async findOneById(id: Types.ObjectId): Promise<LeanDocument<Board>> {
     const board = await this.boardModel.findOne({ _id: id }).exec();
     return board?.toJSON();
