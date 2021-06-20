@@ -14,6 +14,7 @@ import {
 import { BoardsService } from './boards.service';
 import { AuthFilter } from '../auth/filters/auth.filter';
 import { BoardCreateDto } from './dto/board-create.dto';
+import { BoardDeleteDto } from './dto/board-delete.dto';
 import { AuthenticatedGuard } from '../auth/guards/authenticated.guard';
 
 @UseFilters(AuthFilter)
@@ -23,8 +24,11 @@ export class BoardsController {
 
   @UseGuards(AuthenticatedGuard)
   @Post('/')
-  async create(@Body() body: BoardCreateDto) {
-    const created = await this.boardService.create(body);
+  async create(@Request() req, @Body() body: Omit<BoardCreateDto, 'authorId'>) {
+    const created = await this.boardService.create({
+      ...body,
+      authorId: req.user.id,
+    });
     if (!created) {
       throw new BadRequestException('Ошибка. Доска не была создана');
     }
@@ -42,9 +46,9 @@ export class BoardsController {
   }
 
   @UseGuards(AuthenticatedGuard)
-  @Delete('/:id')
-  async remove(@Request() req) {
-    const boardId = req.params.id;
+  @Delete('/')
+  async remove(@Request() req, @Body() body: BoardDeleteDto) {
+    const boardId = body.id;
 
     const board = await this.boardService.findOneById(boardId);
     if (!board) {

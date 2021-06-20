@@ -1,9 +1,7 @@
 import { IsNotEmpty } from 'class-validator';
 import { Types } from 'mongoose';
 
-export class BoardCreateDto {
+export class BoardDeleteDto {
   @IsNotEmpty()
-  title: string;
-
-  authorId: Types.ObjectId;
+  id: Types.ObjectId;
 }
